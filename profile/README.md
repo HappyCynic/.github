@@ -36,7 +36,7 @@ Happy Cynic is currently a solo operation, but contributions, ideas, and thought
 
 ## 📫 Contact
  
-Website: [happycynic.software](https://happycynic.software)
+Website: [happycynic.com](https://happycynic.com)
 
 ---
 
