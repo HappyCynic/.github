@@ -106,6 +106,19 @@ stage.
    `claude[bot]` on a pull request may need approval under Actions settings for first-time
    contributors.
 
+## Rotating the Claude token
+
+The token lives in each repository's `agent` environment (an organization secret would be
+readable by workflows on any branch). Create a new one with `claude setup-token`, then:
+
+```sh
+read -rs TOKEN   # paste the new token
+for repo in pv-icloud; do   # every repository that uses the pipeline
+  printf %s "$TOKEN" | gh secret set CLAUDE_CODE_OAUTH_TOKEN --env agent --repo "HappyCynic/$repo"
+done
+unset TOKEN
+```
+
 ## Changing the pipeline
 
 Edit `actions/agent-sdlc/action.yml` here through a pull request, then bump the pinned SHA in each repository
