@@ -5,7 +5,7 @@
 version: 2
 updates:
   - package-ecosystem: github-actions
-    directory: /
+    directories: [/, /actions/agent-sdlc]
     schedule: { interval: weekly }
     # Only propose releases that have been out for two weeks.
     cooldown: { default-days: 14 }

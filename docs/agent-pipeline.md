@@ -1,9 +1,9 @@
 # Agent pipeline: issues to pull requests
 
 HappyCynic repositories can hand feature work to Claude through GitHub issues. The process
-lives here, in [`.github/workflows/agent-sdlc.yml`](../.github/workflows/agent-sdlc.yml); each
-repository opts in with a small workflow and keeps its own project rules in `CLAUDE.md` and
-`openspec/`.
+lives here, in the composite action [`actions/agent-sdlc`](../actions/agent-sdlc/action.yml);
+each repository opts in with a small workflow and keeps its own project rules in `CLAUDE.md`
+and `openspec/`.
 
 ## How it works
 
@@ -29,8 +29,8 @@ stage.
 |---|---|
 | Strangers steering the agent through issues on public repositories | Only people with write access can add labels, and the action refuses to run for actors without write access. Issue text is never interpolated into the prompt; Claude reads it with `gh issue view` and is told to treat it as data. |
 | Agent merging, approving, releasing or relabelling | Not in its allowed tools (`gh pr merge`, `gh pr review`, `gh api`, `gh release`, `gh label`, `git tag` are disallowed); repository rulesets block pushes to the default branch and `v*` tags; required approval from code owners. |
-| The Claude token leaking through a workflow on another branch | The token is an **environment** secret in environment `agent`, which only the default branch may use. A workflow edited on a branch cannot read it. |
-| Changes to the pipeline itself | This repository is protected like the others; callers pin it by commit SHA, so a change here takes effect in a repository only when its pin is bumped (Dependabot does that as a reviewed PR). |
+| The Claude token leaking through a workflow on another branch | The token is an **environment** secret in environment `agent`, which only the default branch may use. The caller's job selects that environment and passes the token to the action; a workflow edited on a branch cannot read it. (A reusable workflow cannot read a caller repository's environment secrets, which is why this is a composite action.) |
+| Changes to the pipeline itself | This repository is protected like the others; callers pin the action by commit SHA, so a change here takes effect in a repository only when its pin is bumped (Dependabot does that as a reviewed PR). |
 
 ## One-time setup for the organization
 
@@ -80,29 +80,47 @@ stage.
        types: [labeled]
    permissions: {}
    jobs:
-     sdlc:
-       if: startsWith(github.event.label.name, 'agent:')
+     stage:
+       if: github.event.label.name == 'agent:propose' || github.event.label.name == 'agent:implement'
+       runs-on: ubuntu-latest
+       environment: agent # holds CLAUDE_CODE_OAUTH_TOKEN; only the default branch may use it
+       timeout-minutes: 60
+       concurrency: # one stage per issue at a time
+         group: agent-${{ github.event.issue.number }}
+         cancel-in-progress: false
        permissions:
-         contents: read
-         issues: write
-         id-token: write
-       uses: HappyCynic/.github/.github/workflows/agent-sdlc.yml@<commit-sha> # pin; Dependabot bumps it
-       with:
-         openspec_version: 1.13.2 # must match CLAUDE.md
-         setup_uv: true # Python + uv projects
-         setup: uv python install 3.14 && uv sync --frozen --all-groups
-         allowed_tools: Bash(uv:*)
+         contents: read # the agent pushes with the Claude app's token, not this one
+         issues: write # clear the trigger label afterwards
+         id-token: write # Claude GitHub App token exchange
+       steps:
+         - uses: HappyCynic/.github/actions/agent-sdlc@<commit-sha> # pin; Dependabot bumps it
+           with:
+             claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+             openspec_version: 1.13.2 # must match CLAUDE.md
+             setup_uv: true # Python + uv projects
+             setup: uv python install 3.14 && uv sync --frozen --all-groups
+             allowed_tools: Bash(uv:*)
    ```
-
-   Pass no secrets: the token comes from the `agent` environment, which the reusable
-   workflow's job selects itself, so no other repository secret reaches the agent.
 7. **First run:** open a small issue, add `agent:propose`, and check that the draft PR, the
    issue comment and the commits come from `claude[bot]`. The first workflow run by
    `claude[bot]` on a pull request may need approval under Actions settings for first-time
    contributors.
 
+## Rotating the Claude token
+
+The token lives in each repository's `agent` environment (an organization secret would be
+readable by workflows on any branch). Create a new one with `claude setup-token`, then:
+
+```sh
+read -rs TOKEN   # paste the new token
+for repo in pv-icloud; do   # every repository that uses the pipeline
+  printf %s "$TOKEN" | gh secret set CLAUDE_CODE_OAUTH_TOKEN --env agent --repo "HappyCynic/$repo"
+done
+unset TOKEN
+```
+
 ## Changing the pipeline
 
-Edit `agent-sdlc.yml` here through a pull request, then bump the pinned SHA in each repository
+Edit `actions/agent-sdlc/action.yml` here through a pull request, then bump the pinned SHA in each repository
 (Dependabot's `github-actions` updates do this). Keep `anthropics/claude-code-action` and the
 other actions pinned to commit SHAs, and prefer releases at least two weeks old.
