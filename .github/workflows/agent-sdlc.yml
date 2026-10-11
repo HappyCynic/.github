@@ -43,6 +43,11 @@ on:
       timeout_minutes:
         type: number
         default: 60
+    secrets:
+      # Declared so the job can read it, but callers pass nothing: the value comes from the
+      # job's environment (default `agent`), which only the default branch may use.
+      CLAUDE_CODE_OAUTH_TOKEN:
+        required: false
 
 permissions: {}
 
@@ -69,6 +74,16 @@ jobs:
       STAGE: ${{ github.event.label.name }}
       ISSUE: ${{ github.event.issue.number }}
     steps:
+      - name: Check the Claude token
+        run: |
+          if [ -z "$TOKEN" ]; then
+            echo "::error::CLAUDE_CODE_OAUTH_TOKEN is empty. Add it as a secret of the '$ENVIRONMENT' environment (docs/agent-pipeline.md in HappyCynic/.github)."
+            exit 1
+          fi
+        env:
+          TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          ENVIRONMENT: ${{ inputs.environment }}
+
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
