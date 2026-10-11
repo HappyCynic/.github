@@ -100,7 +100,12 @@ stage.
              setup_uv: true # Python + uv projects
              setup: uv python install 3.14 && uv sync --frozen --all-groups
              allowed_tools: Bash(uv:*)
+             model: claude-opus-5-5 # optional; empty = Claude Code's default for the account
    ```
+
+   `model` takes a Claude model id. To use different models per stage, pass an expression,
+   e.g. `${{ github.event.label.name == 'agent:propose' && 'claude-opus-5-5' || 'claude-sonnet-5-5' }}`.
+   Runs use the subscription behind the token, so the models available depend on its plan.
 7. **First run:** open a small issue, add `agent:propose`, and check that the draft PR, the
    issue comment and the commits come from `claude[bot]`. The first workflow run by
    `claude[bot]` on a pull request may need approval under Actions settings for first-time
