@@ -90,6 +90,10 @@ runs:
         DO_NOT_TRACK: "1"
       with:
         claude_code_oauth_token: ${{ inputs.claude_code_oauth_token }}
+        # Claude's own run report in the job summary (why it stopped, blocked commands). Only
+        # maintainers can add the trigger labels, so the input is trusted. The full transcript
+        # (show_full_output) stays off: it could expose secrets in public logs.
+        display_report: true
         # Only issue text from people with write access reaches the agent; the action also
         # refuses to run for actors without write access.
         prompt: |
@@ -126,18 +130,21 @@ runs:
              and stop.
           2. Read the change's proposal and any review comments on the PR
              (`gh pr view <n> --comments`). Implement the tasks in order, tests first,
-             ticking them off in tasks.md.
-          3. Run every check CLAUDE.md lists and `openspec validate --all --strict`; fix
+             ticking them off in tasks.md. Tasks already ticked were done by an earlier run:
+             check them and continue from the first open one.
+          3. After each task group passes its tests, commit and push it, so an interrupted
+             run loses at most one group.
+          4. Run every check CLAUDE.md lists and `openspec validate --all --strict`; fix
              failures. Do not weaken or skip tests to make them pass.
-          4. Archive the change (`openspec archive <change> --yes`) so its deltas merge into
+          5. Archive the change (`openspec archive <change> --yes`) so its deltas merge into
              openspec/specs/, then commit and push.
-          5. Mark the PR ready (`gh pr ready <n>`) and comment on the PR and the issue
+          6. Mark the PR ready (`gh pr ready <n>`) and comment on the PR and the issue
              with what was done and anything the reviewer should check.
 
           If you cannot finish a stage, push what you have, comment on the issue with what
           is missing and why, and stop.
         claude_args: >-
-          --allowedTools "Read,Edit,Write,Glob,Grep,TodoWrite,Bash(git:*),Bash(openspec:*),Bash(gh issue view:*),Bash(gh issue comment:*),Bash(gh pr list:*),Bash(gh pr view:*),Bash(gh pr create:*),Bash(gh pr edit:*),Bash(gh pr ready:*),Bash(gh pr comment:*),Bash(gh pr checks:*)${{ inputs.allowed_tools != '' && format(',{0}', inputs.allowed_tools) || '' }}"
+          --allowedTools "Read,Edit,Write,Glob,Grep,TodoWrite,Bash(git:*),Bash(ls:*),Bash(cat:*),Bash(head:*),Bash(tail:*),Bash(wc:*),Bash(diff:*),Bash(mkdir:*),Bash(mv:*),Bash(cp:*),Bash(openspec:*),Bash(gh issue view:*),Bash(gh issue comment:*),Bash(gh pr list:*),Bash(gh pr view:*),Bash(gh pr create:*),Bash(gh pr edit:*),Bash(gh pr ready:*),Bash(gh pr comment:*),Bash(gh pr checks:*)${{ inputs.allowed_tools != '' && format(',{0}', inputs.allowed_tools) || '' }}"
           --disallowedTools "Bash(gh pr merge:*),Bash(gh pr review:*),Bash(gh api:*),Bash(gh release:*),Bash(gh label:*),Bash(git tag:*),Bash(git push --force:*),Bash(git push -f:*)"
           ${{ inputs.model != '' && format('--model {0}', inputs.model) || '' }}
 

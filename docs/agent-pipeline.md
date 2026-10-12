@@ -20,7 +20,8 @@ and `openspec/`.
    and marks the PR ready for review.
 5. The maintainer reviews, approves and squash-merges. Releases stay with the maintainer.
 
-The workflow removes the trigger label when a stage ends, so adding it again re-runs that
+Labels go on the **issue**, not on the pull request: a label on a PR does not start the
+pipeline. The workflow removes the trigger label when a stage ends, so adding it again re-runs that
 stage.
 
 ## Guard rails
@@ -61,16 +62,20 @@ stage.
 3. **Labels:**
 
    ```sh
-   gh label create agent:propose --repo "$repo" --color 5319E7 --description "Agent writes a proposal, then stops for review"
-   gh label create agent:implement --repo "$repo" --color 0E8A16 --description "Agent implements the approved proposal"
+   gh label create agent:propose --repo "$repo" --color 5319E7 --description "On the issue: agent writes a proposal, then stops for review"
+   gh label create agent:implement --repo "$repo" --color 0E8A16 --description "On the issue: agent implements the approved proposal"
    ```
 4. **Project rules:** a `CLAUDE.md` with the project's hard rules, setup and checks, and an
    "Issue workflow" section; OpenSpec initialised with `openspec init --tools claude` at the
    version the caller pins, with project context in `openspec/config.yaml`; baseline specs in
    `openspec/specs/`. `CODEOWNERS` should require the maintainer's review for `CLAUDE.md`,
    `.claude/`, `openspec/config.yaml` and `.github/`.
-5. **Rulesets:** default branch with no bypass, pull request with one approval from code
-   owners, required CI checks, signed commits, squash merging only; a tag ruleset for `v*`.
+5. **Rulesets:** on the default branch, require a pull request with one approval from code
+   owners (dismiss stale approvals), the CI checks, and squash merging only; bypass only for
+   the admin role and only for pull requests. Do **not** require signed commits: GitHub checks
+   every commit in the PR, and `claude[bot]`'s branch commits are unsigned. Squash merging
+   still keeps the default branch signed, because GitHub creates and signs each squash commit.
+   Add a tag ruleset so only admins can create `v*` tags.
 6. **Caller workflow** at `.github/workflows/agent.yml`:
 
    ```yaml
