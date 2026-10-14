@@ -38,6 +38,12 @@ inputs:
       account. To use different models per stage, pass an expression on
       github.event.label.name.
     default: ""
+  design_system:
+    description: >-
+      Keep design-system/ in the repository a copy of HappyCynic/.github/design-system at the
+      pinned commit, "true" or "false". Each run refreshes it and commits any difference on
+      its own; the agent follows it for user interface work.
+    default: "false"
 
 runs:
   using: composite
@@ -77,6 +83,16 @@ runs:
       env:
         OPENSPEC_VERSION: ${{ inputs.openspec_version }}
 
+    - name: Design system sync
+      if: inputs.design_system == 'true'
+      shell: bash
+      # Puts sync-design-system on PATH for the agent, which runs it once it is on its branch.
+      run: |
+        test -x "$ACTION_PATH/sync-design-system"
+        echo "$ACTION_PATH" >> "$GITHUB_PATH"
+      env:
+        ACTION_PATH: ${{ github.action_path }}
+
     - name: Project setup
       if: inputs.setup != ''
       shell: bash
@@ -111,6 +127,7 @@ runs:
             .github/workflows/ unless the issue explicitly asks for it.
           - Branch name: agent/issue-${{ github.event.issue.number }}-<short-slug>. Commit with git
             and push that branch.
+          ${{ inputs.design_system == 'true' && '- Design system: design-system/ is a managed copy of the Happy Cynic design system. Never edit it by hand. As soon as you are on the branch (in either stage), run `sync-design-system`; if it lists changes, commit only design-system/ as "Sync design system from <the first line of design-system/SOURCE>" before any other work. Follow design-system/README.md and its component READMEs for any user interface change.' || '' }}
 
           If the stage is agent:propose:
           1. Create the branch from the default branch.
@@ -144,7 +161,7 @@ runs:
           If you cannot finish a stage, push what you have, comment on the issue with what
           is missing and why, and stop.
         claude_args: >-
-          --allowedTools "Read,Edit,Write,Glob,Grep,TodoWrite,Bash(git:*),Bash(ls:*),Bash(cat:*),Bash(head:*),Bash(tail:*),Bash(wc:*),Bash(diff:*),Bash(mkdir:*),Bash(mv:*),Bash(cp:*),Bash(openspec:*),Bash(gh issue view:*),Bash(gh issue comment:*),Bash(gh pr list:*),Bash(gh pr view:*),Bash(gh pr create:*),Bash(gh pr edit:*),Bash(gh pr ready:*),Bash(gh pr comment:*),Bash(gh pr checks:*)${{ inputs.allowed_tools != '' && format(',{0}', inputs.allowed_tools) || '' }}"
+          --allowedTools "Read,Edit,Write,Glob,Grep,TodoWrite,Bash(git:*),Bash(ls:*),Bash(cat:*),Bash(head:*),Bash(tail:*),Bash(wc:*),Bash(diff:*),Bash(mkdir:*),Bash(mv:*),Bash(cp:*),Bash(openspec:*),Bash(gh issue view:*),Bash(gh issue comment:*),Bash(gh pr list:*),Bash(gh pr view:*),Bash(gh pr create:*),Bash(gh pr edit:*),Bash(gh pr ready:*),Bash(gh pr comment:*),Bash(gh pr checks:*)${{ inputs.design_system == 'true' && ',Bash(sync-design-system)' || '' }}${{ inputs.allowed_tools != '' && format(',{0}', inputs.allowed_tools) || '' }}"
           --disallowedTools "Bash(gh pr merge:*),Bash(gh pr review:*),Bash(gh api:*),Bash(gh release:*),Bash(gh label:*),Bash(git tag:*),Bash(git push --force:*),Bash(git push -f:*)"
           ${{ inputs.model != '' && format('--model {0}', inputs.model) || '' }}
 

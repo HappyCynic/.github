@@ -69,7 +69,8 @@ stage.
    "Issue workflow" section; OpenSpec initialised with `openspec init --tools claude` at the
    version the caller pins, with project context in `openspec/config.yaml`; baseline specs in
    `openspec/specs/`. `CODEOWNERS` should require the maintainer's review for `CLAUDE.md`,
-   `.claude/`, `openspec/config.yaml` and `.github/`.
+   `.claude/`, `openspec/config.yaml` and `.github/` (and `design-system/` when the
+   repository uses the design system).
 5. **Rulesets:** on the default branch, require a pull request with one approval from code
    owners (dismiss stale approvals), the CI checks, and squash merging only; bypass only for
    the admin role and only for pull requests. Do **not** require signed commits: GitHub checks
@@ -106,15 +107,33 @@ stage.
              setup: uv python install 3.14 && uv sync --frozen --all-groups
              allowed_tools: Bash(uv:*)
              model: claude-opus-5-5 # optional; empty = Claude Code's default for the account
+             design_system: true # optional; keeps design-system/ in step with the master
    ```
 
    `model` takes a Claude model id. To use different models per stage, pass an expression,
    e.g. `${{ github.event.label.name == 'agent:propose' && 'claude-opus-5-5' || 'claude-sonnet-5-5' }}`.
    Runs use the subscription behind the token, so the models available depend on its plan.
+   `design_system: true` is for repositories with a user interface in the Happy Cynic brand;
+   see [Design system](#design-system).
 7. **First run:** open a small issue, add `agent:propose`, and check that the draft PR, the
    issue comment and the commits come from `claude[bot]`. The first workflow run by
    `claude[bot]` on a pull request may need approval under Actions settings for first-time
    contributors.
+
+## Design system
+
+The master copy of the Happy Cynic design system lives in
+[`design-system/`](../design-system/README.md) here, and changes only by pull request to this
+repository. A repository that passes `design_system: true` keeps a copy at `design-system/`:
+
+- At the start of each stage, once on its branch, the agent runs `sync-design-system`
+  (shipped with the action). It replaces `design-system/` with the master at the commit the
+  caller pins, records that commit in `design-system/SOURCE`, and the agent commits any
+  difference on its own before other work. The agent never edits the copy by hand.
+- A change to the master reaches a repository when its pin is bumped (Dependabot's
+  `github-actions` update) and the next agent run syncs it, inside a reviewed pull request.
+- To seed a copy by hand, run `actions/agent-sdlc/sync-design-system` from a checkout of this
+  repository, in the target repository's root.
 
 ## Rotating the Claude token
 
