@@ -1,0 +1,141 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+/* Happy Cynic components: plain CSS classes over tokens.css. Prefix: hc- */
+
+.hc-root, .hc-root * { box-sizing: border-box; }
+.hc-root {
+  font-family: var(--font-sans);
+  color: var(--ink);
+  background: var(--surface);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Focus, shared by every interactive element */
+.hc-btn:focus-visible, .hc-link:focus-visible, .hc-nav a:focus-visible, .hc-product a:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+/* Button: always a pill */
+.hc-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: var(--space-2);
+  padding: var(--space-3) var(--space-6);
+  border-radius: var(--radius-full);
+  border: 1px solid transparent;
+  font: 600 16px/24px var(--font-sans);
+  text-decoration: none; cursor: pointer;
+  transition: background-color .15s ease-out, border-color .15s ease-out, color .15s ease-out;
+}
+.hc-btn--primary { background: var(--sunny); color: var(--on-sunny); }
+.hc-btn--primary:hover { background: var(--sunny-hover); }
+.hc-btn--secondary { background: transparent; color: var(--ink); border-color: var(--border-strong); }
+.hc-btn--secondary:hover { border-color: var(--ink); }
+.hc-btn--ghost { background: transparent; color: var(--teal-ink); padding-left: var(--space-3); padding-right: var(--space-3); }
+.hc-btn--ghost:hover { text-decoration: underline; text-underline-offset: 4px; }
+.hc-btn--sm { padding: var(--space-2) var(--space-4); font-size: 14px; line-height: 20px; }
+.hc-btn[disabled], .hc-btn[aria-disabled="true"] { opacity: .4; pointer-events: none; }
+
+/* Link */
+.hc-link {
+  color: var(--teal-ink); font-weight: 600;
+  text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px;
+}
+.hc-link:hover { text-decoration-thickness: 2px; }
+
+/* Badge */
+.hc-badge {
+  display: inline-flex; align-items: center; gap: var(--space-1);
+  padding: 2px var(--space-2);
+  border-radius: var(--radius-sm);
+  font: 600 12px/16px var(--font-sans); letter-spacing: .04em; text-transform: uppercase;
+  background: var(--surface); color: var(--ink-muted); border: 1px solid var(--border);
+}
+.hc-badge--sunny { background: var(--sunny-tint); color: var(--ink); border-color: transparent; }
+.hc-badge--teal { background: var(--teal-tint); color: var(--teal-ink); border-color: transparent; }
+.hc-badge--danger { background: var(--danger-tint); color: var(--danger); border-color: transparent; }
+
+/* Eyebrow */
+.hc-eyebrow {
+  font: 600 13px/16px var(--font-sans); letter-spacing: .08em; text-transform: uppercase;
+  color: var(--teal-ink); margin: 0 0 var(--space-4);
+}
+
+/* Site header: centred logo over a pipe-separated nav */
+.hc-header {
+  display: flex; flex-direction: column; align-items: center;
+  padding: var(--space-4) var(--space-6);
+  background: var(--surface-raised);
+  box-shadow: var(--shadow-md);
+}
+.hc-header__logo img { display: block; height: 96px; width: auto; }
+.hc-nav { display: flex; align-items: center; gap: var(--space-4); margin-top: var(--space-4); }
+.hc-nav a {
+  color: var(--ink); font-weight: 600; text-decoration: none;
+  transition: color .15s ease-out;
+}
+.hc-nav a:hover, .hc-nav a[aria-current="page"] { color: var(--teal-ink); }
+.hc-nav__sep { color: var(--ink-subtle); }
+
+/* Hero */
+.hc-hero { padding: var(--space-20) var(--space-6); text-align: center; background: var(--surface); }
+.hc-hero__title {
+  font: 700 48px/1 var(--font-sans); letter-spacing: -0.02em;
+  color: var(--ink); margin: 0 0 var(--space-6);
+}
+.hc-hero__accent { color: var(--teal-ink); }
+.hc-hero__lead {
+  font: 400 18px/1.625 var(--font-sans); color: var(--ink-muted);
+  max-width: var(--measure); margin: 0 auto;
+}
+.hc-hero__actions { margin-top: var(--space-10); display: flex; gap: var(--space-4); justify-content: center; flex-wrap: wrap; }
+
+/* Product card: showcase an app on happycynic.com */
+.hc-product {
+  display: grid; grid-template-columns: 96px 1fr; gap: var(--space-6); align-items: start;
+  padding: var(--space-6);
+  background: var(--surface-raised);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  max-width: var(--container);
+}
+.hc-product__media {
+  width: 96px; height: 96px; border-radius: var(--radius-lg);
+  background: var(--teal-tint); display: grid; place-items: center; overflow: hidden;
+}
+.hc-product__media img { width: 100%; height: 100%; object-fit: cover; }
+.hc-product__title { font: 600 24px/32px var(--font-sans); color: var(--ink); margin: var(--space-2) 0; }
+.hc-product__desc { font: 400 16px/1.625 var(--font-sans); color: var(--ink-muted); margin: 0 0 var(--space-6); }
+
+/* Endorsement: "A Happy Cynic app" */
+.hc-endorse {
+  display: inline-flex; align-items: center; gap: var(--space-2);
+  color: var(--ink-muted); text-decoration: none;
+  font: 600 13px/16px var(--font-sans); letter-spacing: .08em; text-transform: uppercase;
+}
+.hc-endorse img { width: 24px; height: 24px; display: block; }
+.hc-endorse strong { color: var(--ink); font-weight: 700; }
+.hc-endorse--lg img { width: 40px; height: 40px; }
+.hc-endorse--lg { font-size: 14px; line-height: 20px; gap: var(--space-3); }
+
+/* Site footer */
+.hc-footer {
+  background: var(--surface-inverse); color: var(--on-inverse);
+  padding: var(--space-10) var(--space-6); text-align: center;
+}
+.hc-footer__legal { margin: 0 0 var(--space-2); font: 400 16px/24px var(--font-sans); }
+.hc-footer__tagline { margin: 0; font: 400 14px/20px var(--font-sans); color: var(--on-inverse-muted); }
+.hc-footer a { color: var(--on-inverse); }
+
+@media (max-width: 640px) {
+  .hc-hero__title { font-size: 36px; }
+  .hc-product { grid-template-columns: 1fr; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hc-btn, .hc-nav a { transition: none; }
+}
+
+/* The full logo's wordmark is black: on dark grounds show the face alone */
+.hc-header__logo .hc-logo--face { display: none; height: 72px; }
+[data-theme="dark"] .hc-header__logo .hc-logo--full { display: none; }
+[data-theme="dark"] .hc-header__logo .hc-logo--face { display: block; }

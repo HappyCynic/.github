@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+# SPDX-FileCopyrightText: 2026 Happy Cynic Software LLC
+# SPDX-License-Identifier: Apache-2.0
+
+# Replace ./design-system (or the directory given) with the Happy Cynic design system that
+# ships with this action: HappyCynic/.github/design-system at the commit the caller pins.
+# Records that commit in design-system/SOURCE and lists what changed (nothing: up to date).
+set -euo pipefail
+
+here="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+root="$(cd "$here/../.." && pwd)"
+# On a runner the action lives in _actions/HappyCynic/.github/<ref>/; elsewhere, ask git.
+ref="${DESIGN_SYSTEM_REF:-}"
+if [ -z "$ref" ]; then
+  if git -C "$root" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+    ref="$(git -C "$root" rev-parse HEAD)"
+  else
+    ref="$(basename "$root")"
+  fi
+fi
+dest="${1:-design-system}"
+
+rm -rf "$dest"
+mkdir -p "$dest"
+cp -R "$root/design-system/." "$dest/"
+cat > "$dest/SOURCE" <<SOURCE
+HappyCynic/.github@$ref
+
+Managed copy of https://github.com/HappyCynic/.github/tree/main/design-system: do not edit
+it here. Change the master by pull request to HappyCynic/.github; the agent pipeline
+(actions/agent-sdlc, design_system: true) refreshes this copy to the commit it pins.
+SOURCE
+
+if git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+  git status --porcelain -- "$dest"
+fi
