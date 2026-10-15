@@ -71,6 +71,7 @@
   --container: 56rem; /* Max width of a centred content section. */
   --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --text-display-xl: 700 72px/0.98 var(--font-sans); /* The happycynic.com home hero only, in place of `display` (`hc-hero__title--xl`). Two lines, the second in `teal-ink`; drops to 40px on phones. */
   --text-display: 700 48px/1 var(--font-sans); /* One per page: the hero headline. Two lines, the second in `teal-ink`. */
   --text-headline: 700 36px/40px var(--font-sans); /* Section headings. */
   --text-title: 600 24px/32px var(--font-sans); /* Card titles, sub-sections. */
@@ -80,6 +81,13 @@
   --text-small: 400 14px/20px var(--font-sans); /* Footer copy, captions, helper text. */
   --text-eyebrow: 600 13px/16px var(--font-sans); /* Uppercase kicker above a headline and the endorsement line, echoing the spaced SOFTWARE of the logo. Always uppercase, in `teal-ink`. */
   --text-code: 400 14px/20px var(--font-mono); /* Inline code, keyboard shortcuts, technical asides. */
+}
+.display-xl {
+  font-family: var(--font-sans);
+  font-size: 72px;
+  line-height: 0.98;
+  font-weight: 700;
+  letter-spacing: -0.03em;
 }
 .display {
   font-family: var(--font-sans);

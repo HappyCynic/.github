@@ -64,6 +64,7 @@ The logo has two parts: the **face** (`happycynic-icon`) and the **wordmark** "H
 
 - Set everything in `--font-sans` (Inter, from Google Fonts at weights 400, 600 and 700). The logo's wordmark is Helvetica Bold; never use Helvetica for UI text, and never retype the wordmark.
 - `display` once per page for the hero; its second line in `teal-ink`. Sections open with `headline`; cards with `title`.
+- `display-xl` (72px) replaces `display` on one page only: the happycynic.com home hero, where the tagline is the whole statement. Never on product sites, never twice.
 - Lead paragraphs use `body-lg` in `ink-muted`, at most `measure` wide. Running text is `body`.
 - `eyebrow` is always uppercase with tracking, in `teal-ink`, a nod to the spaced-out SOFTWARE in the logo.
 - Load Inter explicitly: `<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">`. With Tailwind, set `fontFamily.sans` to Inter in the config or its preflight resets the body to the system font.
@@ -74,6 +75,8 @@ The logo has two parts: the **face** (`happycynic-icon`) and the **wordmark** "H
 - Page gutters: `space-6` on phones, `space-10` on tablets, `space-24` on wide screens.
 - Marketing pages are **centred**: centred headline, centred paragraph capped at `measure`, centred call-to-action. Content sections cap at `container`.
 - Alternate `surface` and `surface-raised` bands, divided by a `border` hairline, rather than stacking cards.
+- The `SiteHeader` comes in two layouts: centred (logo over nav) for a one-page site, compact (`hc-header--compact`: logo left, nav right) once a site has several sections. A site uses one layout on every page.
+- Showcase products with `ProductCard` in a list, or `ProductPanel` when each product gets the full width (a "shelf"). Give each panel a `DoesDoesnt` pair: what the product does (the happy half) and what it refuses to do (the cynic half).
 
 ## Shape, depth and motion
 
@@ -86,6 +89,12 @@ The logo has two parts: the **face** (`happycynic-icon`) and the **wordmark** "H
 - Hover: `sunny` fills go to `sunny-hover`; text links darken by underline thickness, not color.
 - Focus: a solid 2px `focus` ring with 2px offset on every interactive element. Never remove it.
 - Disabled: 40% opacity and no pointer events; keep the label legible.
+
+## Themes
+
+- Pages follow the visitor's system appearance (`prefers-color-scheme`) and may offer a `ThemeToggle` that overrides it. The page sets `data-theme` on `<html>` before first paint, from the stored choice or the system setting; without JavaScript it stays light.
+- The choice is stored in `localStorage` under `hc-theme` (`light` or `dark`), wrapped in try/catch so a blocked store falls back to the system setting.
+- A product's own media (logos, screenshots) keeps its colours in both themes: give its slot a fixed ground it was drawn for.
 
 ## Iconography
 

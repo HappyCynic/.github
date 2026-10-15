@@ -116,6 +116,7 @@ font-family: var(--font-sans);   /* the family alone */
 
 | style | CSS | size / line | weight | family | usage |
 | --- | --- | --- | --- | --- | --- |
+| `display-xl` | `.display-xl`, `--text-display-xl` | 72px / 0.98 | 700 | `sans` | The happycynic.com home hero only, in place of `display` (`hc-hero__title--xl`). Two lines, the second in `teal-ink`; drops to 40px on phones. |
 | `display` | `.display`, `--text-display` | 48px / 1 | 700 | `sans` | One per page: the hero headline. Two lines, the second in `teal-ink`. |
 | `headline` | `.headline`, `--text-headline` | 36px / 40px | 700 | `sans` | Section headings. |
 | `title` | `.title`, `--text-title` | 24px / 32px | 600 | `sans` | Card titles, sub-sections. |
