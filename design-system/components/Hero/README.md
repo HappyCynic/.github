@@ -7,3 +7,4 @@ The opening statement of a page: optional eyebrow, a two-line `display` headline
 - The headline is a setup and a twist: plain promise first, skeptical qualifier second, in `teal-ink`.
 - One hero per page, always centred. Lead paragraph stays within `measure`.
 - At most one primary and one secondary button.
+- On the happycynic.com home page only, add `hc-hero__title--xl` to the title for the `display-xl` size (72px, 40px on phones). Every other page keeps `display`.

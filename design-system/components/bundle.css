@@ -11,7 +11,7 @@
 }
 
 /* Focus, shared by every interactive element */
-.hc-btn:focus-visible, .hc-link:focus-visible, .hc-nav a:focus-visible, .hc-product a:focus-visible {
+.hc-btn:focus-visible, .hc-link:focus-visible, .hc-nav a:focus-visible, .hc-product a:focus-visible, .hc-panel a:focus-visible, .hc-theme-toggle:focus-visible {
   outline: 2px solid var(--focus);
   outline-offset: 2px;
 }
@@ -127,12 +127,89 @@
 .hc-footer__tagline { margin: 0; font: 400 14px/20px var(--font-sans); color: var(--on-inverse-muted); }
 .hc-footer a { color: var(--on-inverse); }
 
+/* Hero: extra-large title for the happycynic.com home only (display-xl) */
+.hc-hero__title--xl { font-size: 72px; line-height: .98; letter-spacing: -0.03em; }
+
+/* Site header, compact: logo left, nav right */
+.hc-header--compact {
+  flex-direction: row; flex-wrap: wrap; justify-content: space-between;
+  gap: var(--space-4) var(--space-6);
+  padding: var(--space-3) var(--space-6);
+}
+.hc-header--compact .hc-header__logo .hc-logo--full { height: 60px; }
+.hc-header--compact .hc-header__logo .hc-logo--face { height: 48px; }
+.hc-header--compact .hc-nav { margin-top: 0; flex-wrap: wrap; gap: var(--space-6); }
+
+/* Product panel: one product across the full width (the shelf) */
+.hc-panel {
+  display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  background: var(--surface-raised);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+.hc-panel__media {
+  min-height: 320px; padding: var(--space-10);
+  display: grid; place-items: center;
+  background: var(--teal-tint);
+}
+.hc-panel__media img { display: block; max-width: 100%; height: auto; }
+.hc-panel__body { padding: var(--space-10); }
+.hc-panel__title { font: 700 36px/40px var(--font-sans); letter-spacing: -0.01em; color: var(--ink); margin: var(--space-4) 0 var(--space-2); }
+.hc-panel__lead { font: 400 18px/1.625 var(--font-sans); color: var(--ink-muted); margin: 0; }
+.hc-panel__actions { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-4); margin-top: var(--space-6); }
+.hc-panel__note { font: 400 14px/20px var(--font-sans); color: var(--ink-subtle); margin: var(--space-4) 0 0; }
+
+/* Does / doesn't: the two halves applied to a product */
+.hc-dd { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-6); margin: var(--space-6) 0 0; }
+.hc-dd__label {
+  font: 600 13px/16px var(--font-sans); letter-spacing: .08em; text-transform: uppercase;
+  color: var(--ink); margin: 0;
+}
+.hc-dd__col--doesnt .hc-dd__label { color: var(--teal-ink); }
+.hc-dd__list { list-style: none; margin: var(--space-2) 0 0; padding: 0; display: flex; flex-direction: column; gap: var(--space-2); }
+.hc-dd__list li { display: flex; gap: var(--space-2); font: 400 16px/1.5 var(--font-sans); color: var(--ink-muted); }
+.hc-dd__list li::before {
+  content: ""; flex: none; width: 16px; height: 16px; margin-top: 4px;
+  background-color: var(--ink);
+  -webkit-mask: var(--hc-dd-icon) center / contain no-repeat;
+  mask: var(--hc-dd-icon) center / contain no-repeat;
+  --hc-dd-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E");
+}
+.hc-dd__col--doesnt .hc-dd__list li::before {
+  background-color: var(--teal-ink);
+  --hc-dd-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round'%3E%3Cpath d='M18 6 6 18M6 6l12 12'/%3E%3C/svg%3E");
+}
+
+/* Theme toggle: overrides the system appearance */
+.hc-theme-toggle {
+  display: inline-grid; place-items: center;
+  width: 44px; height: 44px; padding: 0;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border-strong);
+  background: transparent; color: var(--ink); cursor: pointer;
+  transition: border-color .15s ease-out;
+}
+.hc-theme-toggle:hover { border-color: var(--ink); }
+.hc-theme-toggle[hidden] { display: none; }
+.hc-theme-toggle svg { width: 20px; height: 20px; }
+.hc-theme-toggle .hc-icon-sun { display: none; }
+[data-theme="dark"] .hc-theme-toggle .hc-icon-moon { display: none; }
+[data-theme="dark"] .hc-theme-toggle .hc-icon-sun { display: block; }
+
+@media (max-width: 860px) {
+  .hc-panel { grid-template-columns: minmax(0, 1fr); }
+  .hc-panel__media { min-height: 200px; }
+  .hc-panel__body { padding: var(--space-6); }
+}
 @media (max-width: 640px) {
   .hc-hero__title { font-size: 36px; }
+  .hc-hero__title--xl { font-size: 40px; }
   .hc-product { grid-template-columns: 1fr; }
+  .hc-dd { grid-template-columns: minmax(0, 1fr); }
 }
 @media (prefers-reduced-motion: reduce) {
-  .hc-btn, .hc-nav a { transition: none; }
+  .hc-btn, .hc-nav a, .hc-theme-toggle { transition: none; }
 }
 
 /* The full logo's wordmark is black: on dark grounds show the face alone */
