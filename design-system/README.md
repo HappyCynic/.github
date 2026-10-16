@@ -46,7 +46,7 @@ Real copy to calibrate against:
 The logo has two parts: the **face** (`happycynic-icon`) and the **wordmark** "Happy Cynic / SOFTWARE". Files live in [`logos/`](logos/).
 
 - Use the **full logo** (`happycynic-logo.svg` or `.png`) on `surface` or `surface-raised` in the light theme. Its wordmark is black (`logo-ink`), so it does not work on dark grounds.
-- On dark grounds (`surface` in dark, `surface-inverse`), use the **face alone** (`happycynic-icon`); its built-in white disc keeps it legible. Do not invert or recolor the wordmark yourself.
+- On dark grounds (`surface` in dark, `surface-inverse`), use the **reversed logo** (`happycynic-logo-reversed.svg` or `.png`): the same lockup with a white wordmark, "SOFTWARE" still `teal`. Where space is tight, the **face alone** (`happycynic-icon`) works on any ground. Never invert or recolor the logo yourself; use these files.
 - Clear space: at least a quarter of the face's height on every side. Minimum size: full logo 120px wide, face 16px (use the purpose-made `favicon-16.png` / `favicon-32.png` at those sizes).
 - Never recolor the halves, swap their sides, separate them, rotate the mark, add a shadow or outline, or place it on a busy photo.
 - The SVG wordmark keeps "SOFTWARE" as live Helvetica text. On systems without Helvetica (Windows, Android, some browsers), use the PNG.
