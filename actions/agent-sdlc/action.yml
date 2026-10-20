@@ -106,6 +106,12 @@ runs:
         DO_NOT_TRACK: "1"
       with:
         claude_code_oauth_token: ${{ inputs.claude_code_oauth_token }}
+        # Git identity for the agent's commits. The action's default bot_id (41898282) is
+        # github-actions[bot]'s user id, not claude[bot]'s, so GitHub credited every agent
+        # commit to github-actions[bot]. The noreply address must carry the account's own id:
+        # `gh api users/claude%5Bbot%5D --jq .id`.
+        bot_id: "209825114"
+        bot_name: claude[bot]
         # Claude's own run report in the job summary (why it stopped, blocked commands). Only
         # maintainers can add the trigger labels, so the input is trusted. The full transcript
         # (show_full_output) stays off: it could expose secrets in public logs.
