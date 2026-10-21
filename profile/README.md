@@ -1,43 +1,60 @@
 # Happy Cynic Software LLC
 
-> *Useful software. Skeptically designed.*
+> *Useful Software. Skeptically Designed.*
 
-Happy Cynic Software is an independent software studio focused on building clever, opinionated tools for real people. Led by a solo founder with a background in thoughtful design and a healthy distrust of hype, Happy Cynic creates software that's practical, purposeful, and just a little bit skeptical.
+At Happy Cynic, we design tools for people who are smart enough to question most apps, and still believe software can be delightful, useful, and slightly sarcastic.
 
-## 🧠 What We Do
+## 📦 Products
 
-Happy Cynic designs and develops software grounded in a few clear principles:
+### [Private iCloud MCP](https://github.com/HappyCynic/pv-icloud) · *Early Release*
 
-- ✨ Utility over novelty  
-- 🧼 Clean, calm UX  
-- 🛠️ Lightweight, purposeful features  
-- 😏 A touch of dry wit  
-- 🚫 No bloat. No BS.
+Lets AI assistants like Claude search and read your iCloud Mail, Calendar and Contacts.
 
-Every product released is built with intention — the kind of software we'd actually want to use.
+| It does | It doesn't |
+| --- | --- |
+| Search and read mail, events and contacts | Write anything unless you opt in |
+| Run on a machine you control | Send your data to our servers |
 
-## 📦 Projects
+Open source, Apache-2.0. *Not affiliated with or endorsed by Apple. iCloud is a trademark of Apple Inc.*
 
-### [Preppd](https://github.com/HappyCynic/preppd)
-*Smarter trip prep. Half the panic.*
+### [Private Grocy MCP](https://github.com/HappyCynic/pv-grocy) · *Early Release*
 
-Preppd is a travel preparation app that helps users pack with confidence. It creates intelligent packing lists based on destination, weather, trip duration, and traveler profiles. It’s designed to reduce stress, eliminate overpacking, and remember the little things — like chargers, passports, and dignity.
+Lets AI assistants like Claude check and update your Grocy stock, shopping list, recipes, meal plan and chores.
 
-More tools are in the works, released on a "when it's ready" schedule — not on a VC's timeline.
+| It does | It doesn't |
+| --- | --- |
+| Track stock, shopping, recipes and chores | Write anything unless you opt in |
+| Run on a machine you control | Send your data to our servers |
 
-## 🎯 Philosophy
+Open source, Apache-2.0. *Not affiliated with or endorsed by the Grocy project.*
 
-Happy Cynic doesn’t chase trends or build for buzzwords.  
-The goal is to make software that feels like a helpful companion — calm, capable, and quietly clever.
+### [Preppd](https://preppd.app) · *Coming Soon*
+
+Smart travel prep for real people. Packing lists that know the weather, your destination, and your chaotic reality.
+
+## 🧠 A Solo Studio. Two Opinions on Everything.
+
+Happy Cynic Software is a solo studio that builds useful, opinionated tools for real people. We believe software should be clear, purposeful, and maybe even a little clever. Not bloated, trendy, or pretending to be your best friend.
+
+Founded on the principle that skepticism and optimism can coexist, Happy Cynic designs with both in mind: sharp enough to question the default, and idealistic enough to build something better.
+
+## 🎯 How We Work
+
+Both halves sign off on everything.
+
+- **Useful first.** Every screen should earn its place. If it does not solve a problem, we cut it.
+- **Skeptical of defaults.** We question the trendy pattern before reaching for it. No dark patterns, no fake urgency, no growth-hack modals.
+- **Calm, not cold.** Plenty of white space, one accent at a time, one joke at a time.
+- **Both halves, never a blend.** Optimism and skepticism sit side by side. Neither one gets to water the other down.
 
 ## 🛠️ Contributing
 
-Happy Cynic is currently a solo operation, but contributions, ideas, and thoughtful critique are always welcome. If something resonates, feel free to reach out.
+Happy Cynic is a solo operation, but contributions, ideas, and thoughtful critique are always welcome. Open an issue on the relevant repository.
 
 ## 📫 Contact
- 
-Website: [happycynic.com](https://happycynic.com)
+
+Website: [happycynic.com](https://happycynic.com) · Studio: [happycynic.com/studio](https://happycynic.com/studio/)
 
 ---
 
-© 2025 Happy Cynic Software LLC — All rights reserved.
+© 2026 Happy Cynic Software LLC. We build clever tools for people who don't fall for buzzwords.
