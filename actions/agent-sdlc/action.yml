@@ -75,7 +75,7 @@ runs:
         persist-credentials: false
 
     - if: inputs.setup_uv == 'true'
-      uses: astral-sh/setup-uv@1c37ad07a6a961277cf70c0d37d6f313000f5884 # v10.3.0
+      uses: astral-sh/setup-uv@07a047e608db84b3d8c06cd9a7c7dcc9c355c18e # v10.3.2
 
     - name: OpenSpec
       shell: bash
@@ -100,7 +100,7 @@ runs:
       env:
         SETUP: ${{ inputs.setup }}
 
-    - uses: anthropics/claude-code-action@5eb090f3c3afd701a0672cd32981197ca27688f6 # v1.0.253
+    - uses: anthropics/claude-code-action@925afb53776cf1a2b738c6bdbed37b4d4000ef13 # v1.0.262
       env:
         OPENSPEC_TELEMETRY: "0"
         DO_NOT_TRACK: "1"
